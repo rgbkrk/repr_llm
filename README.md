@@ -25,4 +25,6 @@ What I'd like to have library authors do, similar to what we did with `_repr_htm
 
 ## Credit
 
-Thank you to [Peter Wang](https://github.com/pzwang) and [Dave Shoup](https://github.com/shouples) for sparking this discussion and convincing me to start a document we can collaborate on.
+Originally I was going to suggest more package authors use `_repr_markdown_` (and they should!). Then [Peter Wang](https://github.com/pzwang) suggested that we have a version written for the machine, just like `ai-plugin.json` does, especially since the LLMs _can_ be a more advanced reader.
+
+Thank you to [Dave Shoup](https://github.com/shouples) for the conversations about pandas representation and how we can keep improving what we send for `Out[*]` to Large Language Models.
