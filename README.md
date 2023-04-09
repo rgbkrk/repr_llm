@@ -4,7 +4,7 @@ Create lightweight representations of objects for Large Language Model consumpti
 
 ## Background
 
-While experimenting with Large Language Models directly and with tools like [genai](https://github.com/noteable-io/genai), [dangermode](https://github.com/rgbkrk/dangermode), and langchain I've been naturally converting representations of my data or text to markdown as a format that GPT models can understand and converse with a user about.
+While experimenting with Large Language Models directly [💬](https://platform.openai.com/docs/api-reference/chat/create) [🤗](https://huggingface.co/) and with tools like [genai](https://github.com/noteable-io/genai), [dangermode](https://github.com/rgbkrk/dangermode), and [langchain](https://github.com/hwchase17/langchain) I've been naturally converting representations of my data or text to markdown as a format that GPT models can understand and converse with a user about.
 
 Some of the core limitations for Large Language Models are:
 
