@@ -1,8 +1,13 @@
-"""Creating rich displays for Large Language Model Consumption."""
+"""Rich display for Large Language Model Consumption."""
 
 
 class PlainForLLM:
-    """A plain text representation of an object for Large Language Model Consumption."""
+    """A plain text representation of an object for Large Language Model Consumption.
+
+    Similar to IPython.display.Markdown, this object can take a string and
+    display it in a rich format. `_repr_llm_` for the model and `__repr__`
+    for frontend human consumption (terminals and notebooks).
+    """
 
     def __init__(self, content):
         """Create a new PlainForLLM object.
