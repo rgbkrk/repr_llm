@@ -1,8 +1,16 @@
 """Summarizing Pandas DataFrames and Series for Large Language Models."""
 
 # This module is an optional import due to importing numpy and pandas
-import numpy as np
-import pandas as pd
+
+PANDAS_INSTALLED = False
+
+try:
+    import numpy as np
+    import pandas as pd
+
+    PANDAS_INSTALLED = True
+except ImportError:
+    pass
 
 
 def summarize_dataframe(df, sample_rows=5, sample_columns=20):
@@ -16,6 +24,9 @@ def summarize_dataframe(df, sample_rows=5, sample_columns=20):
     Returns:
         A markdown string with a summary of the dataframe
     """
+    if not PANDAS_INSTALLED:
+        raise ImportError("Pandas must be installed to use summarize_dataframe")
+
     num_rows, num_cols = df.shape
 
     # # Column Summary
@@ -28,18 +39,18 @@ def summarize_dataframe(df, sample_rows=5, sample_columns=20):
     column_info.columns = ["Column Name", "Data Type", "Missing Values", "% Missing"]
     column_info["Data Type"] = column_info["Data Type"].astype(str)
 
-    # TODO: Bring these back once we can ensure describe does not fail on some tables
+    # TODO: Bring these back once we can ensure `describe` does not fail on some tables
     # # Basic summary statistics for numerical and categorical columns
     # # get basic statistical information for each column
     # numerical_summary = df.describe(include=[np.number]).T.reset_index().rename(columns={'index': 'Column Name'})
 
-    # has_categoricals = any(df.select_dtypes(include=['category', 'datetime', 'timedelta']).columns)
+    has_categoricals = any(df.select_dtypes(include=['category', 'datetime', 'timedelta']).columns)
 
-    # if has_categoricals:
-    #     categorical_describe = df.describe(include=['category', 'datetime', 'timedelta'])
-    #     categorical_summary = categorical_describe.T.reset_index().rename(columns={'index': 'Column Name'})
-    # else:
-    #     categorical_summary = pd.DataFrame(columns=['Column Name'])
+    if has_categoricals:
+        categorical_describe = df.describe(include=['category', 'datetime', 'timedelta'])
+        categorical_summary = categorical_describe.T.reset_index().rename(columns={'index': 'Column Name'})
+    else:
+        categorical_summary = pd.DataFrame(columns=['Column Name'])
 
     sample_columns = min(sample_columns, df.shape[1])
     sample_rows = min(sample_rows, df.shape[0])
@@ -54,7 +65,7 @@ def summarize_dataframe(df, sample_rows=5, sample_columns=20):
         f"Number of Columns: {num_cols:,}\n\n"
         f"### Column Information\n\n{column_info.to_markdown(tablefmt=tablefmt)}\n\n"
         # f"### Numerical Summary\n\n{numerical_summary.to_markdown(tablefmt=tablefmt)}\n\n"
-        # f"### Categorical Summary\n\n{categorical_summary.to_markdown(tablefmt=tablefmt)}\n\n"
+        f"### Categorical Summary\n\n{categorical_summary.to_markdown(tablefmt=tablefmt)}\n\n"
         f"### Sample Data ({sample_rows}x{sample_columns})\n\n{sampled.to_markdown(tablefmt=tablefmt)}"
     )
 
@@ -71,6 +82,9 @@ def summarize_series(series, sample_size=5):
     Returns:
         A markdown string with a summary of the series
     """
+    if not PANDAS_INSTALLED:
+        raise ImportError("Pandas must be installed to use summarize_series")
+
     # Get basic series information
     num_values = len(series)
     data_type = series.dtype
@@ -101,3 +115,38 @@ def summarize_series(series, sample_size=5):
     )
 
     return output
+
+
+def format_dataframe_for_llm(df):
+    """Format a dataframe for Large Language Model Consumption.
+
+    Args:
+        df (Pandas DataFrame): The dataframe to be formatted.
+
+    Returns:
+        A markdown string with a formatted dataframe
+    """
+    if not PANDAS_INSTALLED:
+        raise ImportError("Pandas must be installed to use format_dataframe_for_llm")
+
+    with pd.option_context('display.max_rows', 5, 'display.html.table_schema', False, 'display.max_columns', 20):
+        num_columns = min(pd.options.display.max_columns, df.shape[1])
+        num_rows = min(pd.options.display.max_rows, df.shape[0])
+        return summarize_dataframe(df, sample_rows=num_rows, sample_columns=num_columns)
+
+
+def format_series_for_llm(series):
+    """Format a series for Large Language Model Consumption.
+
+    Args:
+        series (Pandas Series): The series to be formatted.
+
+    Returns:
+        A markdown string with a formatted series
+    """
+    if not PANDAS_INSTALLED:
+        raise ImportError("Pandas must be installed to use format_series_for_llm")
+
+    with pd.option_context('display.max_rows', 5, 'display.html.table_schema', False, 'display.max_columns', 20):
+        num_cols = min(pd.options.display.max_columns, series.shape[0])
+        return summarize_series(series, sample_size=num_cols)
