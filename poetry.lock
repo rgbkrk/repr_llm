@@ -996,7 +996,7 @@ tests = ["cython", "littleutils", "pygments", "pytest", "typeguard"]
 name = "tabulate"
 version = "0.9.0"
 description = "Pretty-print tabular data"
-optional = false
+optional = true
 python-versions = ">=3.7"
 files = [
     {file = "tabulate-0.9.0-py3-none-any.whl", hash = "sha256:024ca478df22e9340661486f85298cff5f6dcdba14f3813e8830015b9ed1948f"},
@@ -1107,4 +1107,4 @@ numfocus = ["numpy", "pandas"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "59f54028483f3b040c0faca4f63fa089f6bb20b4f5d5976ee49600ae685a71f4"
+content-hash = "f56ec4cb3bc6c581b744d085e1ad1c55cfbd7a0446d0084f5bec874bbde7c5e3"
