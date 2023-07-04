@@ -52,9 +52,15 @@ def summarize_dataframe(df, sample_rows=5, sample_columns=20):
     else:
         categorical_summary = pd.DataFrame(columns=['Column Name'])
 
-    sample_columns = min(sample_columns, df.shape[1])
+    # Ignore any columns that do not have `:@computed_region` in the name, which are derived data not useful for
+    # summarization of sample data
+    filtered_columns = [col for col in df.columns if ":@computed_region" not in col]
+
+    # adjust sample size with filtered dataframe shape
+    sample_columns = min(sample_columns, len(filtered_columns))
     sample_rows = min(sample_rows, df.shape[0])
-    sampled = df.sample(sample_columns, axis=1).sample(sample_rows, axis=0)
+
+    sampled = df[filtered_columns].sample(sample_columns, axis=1).sample(sample_rows, axis=0)
 
     tablefmt = "github"
 
