@@ -2,7 +2,7 @@
 
 <img src="https://github.com/rgbkrk/repr_llm/assets/836375/f1b8b252-7e70-4897-bfbf-e87d48bb46bd" height="64px" />
 
-Create lightweight representations of objects for Large Language Model consumption
+Create lightweight representations of Python objects for Large Language Model consumption
 
 ## Background
 
