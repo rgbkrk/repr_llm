@@ -13,7 +13,7 @@ except ImportError:
     pass
 
 
-def summarize_dataframe(df, sample_rows=5, sample_columns=20):
+def summarize_dataframe(df, sample_rows=20, sample_columns=20):
     """Create a summary of a Pandas DataFrame for Large Language Model Consumption.
 
     Args:
@@ -56,11 +56,17 @@ def summarize_dataframe(df, sample_rows=5, sample_columns=20):
     # summarization of sample data
     filtered_columns = [col for col in df.columns if ":@computed_region" not in str(col)]
 
-    # adjust sample size with filtered dataframe shape
-    sample_columns = min(sample_columns, len(filtered_columns))
-    sample_rows = min(sample_rows, df.shape[0])
+    # adjust the number of columns and rows to be displayed with filtered dataframe shape
+    display_columns = min(sample_columns, len(filtered_columns))
+    display_rows = min(sample_rows, df.shape[0])
 
-    sampled = df[filtered_columns].sample(sample_columns, axis=1).sample(sample_rows, axis=0)
+    if df.size <= display_rows * display_columns:
+        # df is small enough to pass straight through with minor column filtering
+        displayed_data = df[filtered_columns]
+        data_label = "Table"
+    else:
+        displayed_data = df[filtered_columns].sample(display_columns, axis=1).sample(display_rows, axis=0)
+        data_label = f"Sample Table ({display_rows}x{display_columns})"
 
     tablefmt = "github"
 
@@ -72,7 +78,7 @@ def summarize_dataframe(df, sample_rows=5, sample_columns=20):
         f"### Column Information\n\n{column_info.to_markdown(tablefmt=tablefmt)}\n\n"
         # f"### Numerical Summary\n\n{numerical_summary.to_markdown(tablefmt=tablefmt)}\n\n"
         f"### Categorical Summary\n\n{categorical_summary.to_markdown(tablefmt=tablefmt)}\n\n"
-        f"### Sample Data ({sample_rows}x{sample_columns})\n\n{sampled.to_markdown(tablefmt=tablefmt)}"
+        f"### {data_label}\n\n{displayed_data.to_markdown(tablefmt=tablefmt)}"
     )
 
     return output
