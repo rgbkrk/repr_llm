@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "repr-llm"
-version = "0.2.1"
+version = "0.3.0"
 description = "Creating lightweight representations of objects for Large Language Model consumption"
 authors = ["Kyle Kelley <rgbkrk@gmail.com>"]
 license = "BSD-3-Clause"

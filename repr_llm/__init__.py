@@ -1,6 +1,6 @@
 __author__ = """Kyle Kelley"""
 __email__ = 'rgbkrk@gmail.com'
-__version__ = '0.2.1'
+__version__ = '0.3.0'
 
 from .display import PlainForLLM
 from .formatter import LLMFormatter, register_llm_formatter
