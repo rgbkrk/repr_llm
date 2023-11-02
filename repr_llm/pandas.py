@@ -60,7 +60,8 @@ def summarize_dataframe(df, sample_rows=20, sample_columns=20):
     display_columns = min(sample_columns, len(filtered_columns))
     display_rows = min(sample_rows, df.shape[0])
 
-    if display_rows * display_columns >= df.shape[0] * df.shape[1]:
+    if df.size <= display_rows * display_columns:
+        # df is small enough to pass straight through with minor column filtering
         displayed_data = df[filtered_columns]
         data_label = "Table"
     else:
